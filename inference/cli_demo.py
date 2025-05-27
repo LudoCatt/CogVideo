@@ -96,6 +96,10 @@ def generate_video(
     video = None
 
     model_name = model_path.split("/")[-1].lower()
+    # hardcode this cause cant be bothered
+    if model_name not in RESOLUTION_MAP:
+        model_name = "cogvideox-5b-i2v"
+
     desired_resolution = RESOLUTION_MAP[model_name]
     if width is None or height is None:
         height, width = desired_resolution

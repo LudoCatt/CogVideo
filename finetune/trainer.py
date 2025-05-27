@@ -465,6 +465,18 @@ class Trainer:
 
                 logs["loss"] = loss.detach().item()
                 logs["lr"] = self.lr_scheduler.get_last_lr()[0]
+
+                # Wandb logging
+                # if self.trainer.is_global_zero:
+                wandb.log(
+                    {
+                    "global_step": global_step,
+                    "loss":        loss.detach().item(),         
+                    "log_loss":    loss.log().detach().item(),
+                    },
+                    commit=True
+                )
+
                 progress_bar.set_postfix(logs)
 
                 # Maybe run validation

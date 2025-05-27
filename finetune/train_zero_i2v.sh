@@ -1,34 +1,55 @@
 #!/usr/bin/env bash
+#SBATCH --job-name=full_finetune
+#SBATCH --partition=gpu
+#SBATCH --time=24:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gpus=1
+#SBATCH --gres=gpumem:79g
+#SBATCH --cpus-per-task=1 
+#SBATCH --mem-per-cpu=79G
+#SBATCH --output=logs/full_%x_%j_out.txt
+#SBATCH --error=logs/full_%x_%j_err.txt
+
+module load stack/2024-06
+module load gcc/12.2.0
+module load cuda/12.4.1
+
+export CUDA_HOME=${CUDA_HOME:-$(dirname "$(dirname "$(which nvcc)")")}
+export LD_LIBRARY_PATH="$CUDA_HOME/lib64:$LD_LIBRARY_PATH"
+
+source "$HOME/miniconda3/etc/profile.d/conda.sh"
+conda activate cogvideox
 
 # Prevent tokenizer parallelism issues
 export TOKENIZERS_PARALLELISM=false
 
 # Model Configuration
 MODEL_ARGS=(
-    --model_path "THUDM/CogVideoX1.5-5B-I2V"
-    --model_name "cogvideox1.5-i2v"  # ["cogvideox-i2v"]
+    --model_path "/cluster/scratch/lcattaneo/CogVideoX"
+    --model_name "cogvideox-i2v"  # ["cogvideox-i2v"]
     --model_type "i2v"
     --training_type "sft"
 )
 
 # Output Configuration
 OUTPUT_ARGS=(
-    --output_dir "/absolute/path/to/your/output_dir"
+    --output_dir "/cluster/scratch/lcattaneo/outputs_full"
     --report_to "tensorboard"
 )
 
 # Data Configuration
 DATA_ARGS=(
-    --data_root "/absolute/path/to/your/data_root"
-    --caption_column "prompt.txt"
+    --data_root "/cluster/scratch/lcattaneo/data"
+    --caption_column "prompts.txt"
     --video_column "videos.txt"
     # --image_column "images.txt"  # comment this line will use first frame of video as image conditioning
-    --train_resolution "81x768x1360"  # (frames x height x width), frames should be 8N+1 and height, width should be multiples of 16
+    --train_resolution "49x480x720"  # (frames x height x width), frames should be 8N+1 and height, width should be multiples of 16
 )
 
 # Training Configuration
 TRAIN_ARGS=(
-    --train_epochs 10 # number of training epochs
+    --train_epochs 200 # number of training epochs
     --seed 42 # random seed
 
     #########   Please keep consistent with deepspeed config file ##########
@@ -40,7 +61,7 @@ TRAIN_ARGS=(
 
 # System Configuration
 SYSTEM_ARGS=(
-    --num_workers 8
+    --num_workers 1
     --pin_memory True
     --nccl_timeout 1800
 )
