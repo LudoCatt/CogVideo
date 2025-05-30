@@ -6,10 +6,10 @@
 #SBATCH --ntasks=1
 #SBATCH --gpus=1
 #SBATCH --gres=gpumem:79g
-#SBATCH --cpus-per-task=1 
-#SBATCH --mem-per-cpu=79G
-#SBATCH --output=logs/full_%x_%j_out.txt
-#SBATCH --error=logs/full_%x_%j_err.txt
+#SBATCH --cpus-per-task=2 
+#SBATCH --mem-per-cpu=100G
+#SBATCH --output=logs/full_out.txt
+#SBATCH --error=logs/full_err.txt
 
 module load stack/2024-06
 module load gcc/12.2.0
@@ -61,7 +61,7 @@ TRAIN_ARGS=(
 
 # System Configuration
 SYSTEM_ARGS=(
-    --num_workers 1
+    --num_workers 0
     --pin_memory True
     --nccl_timeout 1800
 )
@@ -82,6 +82,8 @@ VALIDATION_ARGS=(
     --validation_images "images.txt"
     --gen_fps 16
 )
+
+export TORCH_DATALOADER_PREFETCH_FACTOR=1
 
 # Combine all arguments and launch training
 accelerate launch --config_file accelerate_config.yaml train.py \
