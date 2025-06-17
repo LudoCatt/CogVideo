@@ -46,7 +46,6 @@ def main() -> None:
             "--prompt",             prompt,
             "--image_or_video_path", str(img),
             "--model_path",         args.model_path,
-            "--lora_path",          args.lora_path,
             "--output_path",        str(out_file),
             "--num_frames",         str(args.num_frames),
             "--width",              str(args.width),

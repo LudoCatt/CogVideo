@@ -70,7 +70,7 @@ SYSTEM_ARGS=(
 CHECKPOINT_ARGS=(
     --checkpointing_steps 10 # save checkpoint every x steps
     --checkpointing_limit 2 # maximum number of checkpoints to keep, after which the oldest one is deleted
-    # --resume_from_checkpoint "/absolute/path/to/checkpoint_dir"  # if you want to resume from a checkpoint, otherwise, comment this line
+    # --resume_from_checkpoint "/cluster/scratch/lcattaneo/outputs_full/checkpoint-1000"  
 )
 
 # Validation Configuration
