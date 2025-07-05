@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#SBATCH --account=ls_krausea
 #SBATCH --job-name=full_finetune
 #SBATCH --partition=gpu
 #SBATCH --time=24:00:00
@@ -49,7 +50,7 @@ DATA_ARGS=(
 
 # Training Configuration
 TRAIN_ARGS=(
-    --train_epochs 200 # number of training epochs
+    --train_epochs 100 # number of training epochs
     --seed 42 # random seed
 
     #########   Please keep consistent with deepspeed config file ##########

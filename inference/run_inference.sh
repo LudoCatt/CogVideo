@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=alt_inference
+#SBATCH --account=ls_krausea
+#SBATCH --job-name=inference
 #SBATCH --partition=gpu
 #SBATCH --time=4:00:00
 #SBATCH --nodes=1
@@ -7,8 +8,8 @@
 #SBATCH --gpus=rtx_4090:1
 #SBATCH --cpus-per-task=1 
 #SBATCH --mem-per-cpu=50G
-#SBATCH --output=logs/inference_out_alt.txt
-#SBATCH --error=logs/inference_err_alt.txt
+#SBATCH --output=logs/inference_out.txt
+#SBATCH --error=logs/inference_err.txt
 
 # modules
 module load stack/2024-06
@@ -23,8 +24,8 @@ conda activate cogvideox
 
 python /cluster/home/lcattaneo/CogVideo/inference/run_inference.py \
     --script_dir   /cluster/home/lcattaneo/CogVideo/inference \
-    --prompt_file  /cluster/scratch/lcattaneo/alt_data/general.txt \
-    --frame_dir    /cluster/scratch/lcattaneo/alt_data/general_images \
-    --output_dir   /cluster/scratch/lcattaneo/i2v_out/General_1000 \
+    --prompt_file  /cluster/scratch/lcattaneo/inf_data/inf_prompts.txt \
+    --frame_dir    /cluster/scratch/lcattaneo/inf_data/first_frames \
+    --output_dir   /cluster/scratch/lcattaneo/i2v_out/HB_finetuned \
     --model_path   /cluster/scratch/lcattaneo/CogVideoX-ft \
     --lora_path    /cluster/scratch/lcattaneo/outputs/checkpoint-2250/pytorch_lora_weights.safetensors

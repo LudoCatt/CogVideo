@@ -51,6 +51,7 @@ def main() -> None:
             "--width",              str(args.width),
             "--height",             str(args.height),
             "--generate_type",      "i2v",
+            "--fps",                str(8),
         ]
         subprocess.run(cmd, check=True)
 
