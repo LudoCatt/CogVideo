@@ -50,7 +50,7 @@ DATA_ARGS=(
 
 # Training Configuration
 TRAIN_ARGS=(
-    --train_epochs 100 # number of training epochs
+    --train_epochs 50 # number of training epochs
     --seed 42 # random seed
 
     #########   Please keep consistent with deepspeed config file ##########
@@ -87,7 +87,7 @@ VALIDATION_ARGS=(
 export TORCH_DATALOADER_PREFETCH_FACTOR=1
 
 # Combine all arguments and launch training
-accelerate launch --config_file accelerate_config.yaml train.py \
+accelerate launch --main_process_port 0 --config_file accelerate_config.yaml train.py \
     "${MODEL_ARGS[@]}" \
     "${OUTPUT_ARGS[@]}" \
     "${DATA_ARGS[@]}" \
