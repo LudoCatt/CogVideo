@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--frame_dir",      required=True)
     p.add_argument("--output_dir",     required=True)
     p.add_argument("--model_path",     required=True)
-    p.add_argument("--lora_path",      required=True)
+    p.add_argument("--lora_path",      type=str, default=None)
     p.add_argument("--num_frames",     type=int, default=49)
     p.add_argument("--width",          type=int, default=720)
     p.add_argument("--height",         type=int, default=480)

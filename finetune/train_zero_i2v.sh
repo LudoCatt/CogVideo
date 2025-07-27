@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 #SBATCH --account=ls_krausea
-#SBATCH --job-name=full_finetune
+#SBATCH --job-name=100
 #SBATCH --partition=gpu
-#SBATCH --time=24:00:00
+#SBATCH --time=4:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --gpus=1
-#SBATCH --gres=gpumem:79g
-#SBATCH --cpus-per-task=2 
+#SBATCH --gres=gpumem:39g
+#SBATCH --cpus-per-task=2
 #SBATCH --mem-per-cpu=100G
-#SBATCH --output=logs/full_out.txt
-#SBATCH --error=logs/full_err.txt
+#SBATCH --output=logs/100_out.txt
+#SBATCH --error=logs/100_err.txt
 
+module purge
 module load stack/2024-06
 module load gcc/12.2.0
 module load cuda/12.4.1
@@ -35,22 +36,22 @@ MODEL_ARGS=(
 
 # Output Configuration
 OUTPUT_ARGS=(
-    --output_dir "/cluster/scratch/lcattaneo/outputs_full"
+    --output_dir "/cluster/scratch/lcattaneo/outputs_full/ckpt_000_5steps"
     --report_to "tensorboard"
 )
 
 # Data Configuration
 DATA_ARGS=(
-    --data_root "/cluster/scratch/lcattaneo/data"
-    --caption_column "prompts.txt"
-    --video_column "videos.txt"
+    --data_root "/cluster/scratch/lcattaneo/data_exp2/data_000"
+    --caption_column "prompts_000.txt"
+    --video_column "videos_000.txt"
     # --image_column "images.txt"  # comment this line will use first frame of video as image conditioning
     --train_resolution "49x480x720"  # (frames x height x width), frames should be 8N+1 and height, width should be multiples of 16
 )
 
 # Training Configuration
 TRAIN_ARGS=(
-    --train_epochs 50 # number of training epochs
+    --train_epochs 1 # number of training epochs
     --seed 42 # random seed
 
     #########   Please keep consistent with deepspeed config file ##########
@@ -69,9 +70,10 @@ SYSTEM_ARGS=(
 
 # Checkpointing Configuration
 CHECKPOINT_ARGS=(
-    --checkpointing_steps 10 # save checkpoint every x steps
-    --checkpointing_limit 2 # maximum number of checkpoints to keep, after which the oldest one is deleted
-    # --resume_from_checkpoint "/cluster/scratch/lcattaneo/outputs_full/checkpoint-1000"  
+    --checkpointing_steps 1 # save checkpoint every x steps
+    --checkpointing_limit 4 # maximum number of checkpoints to keep, after which the oldest one is deleted
+    # --resume_from_checkpoint "/cluster/scratch/lcattaneo/outputs_full/checkpoint-700"
+    --wandb_name "G1_100_exp2"  
 )
 
 # Validation Configuration

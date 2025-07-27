@@ -70,6 +70,7 @@ class Args(BaseModel):
     enable_slicing: bool = True
     enable_tiling: bool = True
     nccl_timeout: int = 1800
+    wandb_name: str | None
 
     ########## Lora ##########
     rank: int = 128
@@ -235,6 +236,7 @@ class Args(BaseModel):
         parser.add_argument("--checkpointing_steps", type=int, default=200)
         parser.add_argument("--checkpointing_limit", type=int, default=10)
         parser.add_argument("--resume_from_checkpoint", type=str, default=None)
+        parser.add_argument("--wandb_name", type=str, default=None)
 
         # Validation
         parser.add_argument("--do_validation", type=lambda x: x.lower() == 'true', default=False)

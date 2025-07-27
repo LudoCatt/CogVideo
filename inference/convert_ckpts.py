@@ -5,6 +5,8 @@ import json
 import torch
 from safetensors.torch import save_file
 
+# python convert_ckpts.py --sharded_bin_path /cluster/scratch/lcattaneo/outputs_full/ckpt_080_5steps/checkpoint-5/cogvideox_fp32.bin --output_dir /cluster/scratch/lcattaneo/Finetuned/CogVideoX-080-5steps
+
 def main():
     """
     This script changes the checkpoint from the sharded .bin to the sharded .safetensors
